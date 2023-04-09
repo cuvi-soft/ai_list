@@ -1,16 +1,11 @@
-# example/views.py
-from datetime import datetime
+from django.views import generic
+from .models import Post
 
-from django.http import HttpResponse
 
-def index(request):
-    now = datetime.now()
-    html = f'''
-    <html>
-        <body>
-            <h1>Hello from Vercel!</h1>
-            <p>The current time is { now }.</p>
-        </body>
-    </html>
-    '''
-    return HttpResponse(html)
+class PostList(generic.ListView):
+    queryset = Post.objects.filter(status=1).order_by('-created_on')
+    template_name = 'index.html'
+
+class PostDetail(generic.DetailView):
+    model = Post
+    template_name = 'post_detail.html'
